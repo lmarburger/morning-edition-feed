@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+  <channel>
+    <title>Morning Edition: NPR</title>
+    <linkx>http://cl.ly/code/0o3L2s0k3k1w/feed.xml</linkx>
+    <pubDate>Mon, 21 Jul 2014</pubDate>
+    <language>en</language>
+    <itunes:summary>Morning Edition: NPR</itunes:summary>
+    <itunes:image href="http://f.cl.ly/items/0P06051v082S432Z3z1u/Morning%20Edition.jpg"/>
+    <image>
+      <url>http://f.cl.ly/items/0P06051v082S432Z3z1u/Morning%20Edition.jpg</url>
+      <title>Morning Edition</title>
+      <width>450</width>
+      <height>306</height>
+    </image>
+    <item>
+      <itunes:image href="http://f.cl.ly/items/0P06051v082S432Z3z1u/Morning%20Edition.jpg"/>
+      <title>In Crowded Gaza, Civilians Have Few Places To Flee</title>
+      <linkx>http://www.npr.org/blogs/parallels/2014/07/21/333537714/in-crowded-gaza-civilians-have-few-places-to-flee</linkx>
+      <guid isPermaLink="false">res333537842</guid>
+      <pubDate>Mon, 21 Jul 2014</pubDate>
+      <enclosure url="http://pd.npr.org/anon.npr-mp3/npr/me/2014/07/20140721_me_in_gaza_ambulances_race_to_recover_dead_and_wounded.mp3" type="audio/mp3"/>
+    </item>
+  </channel>
+</rss>
