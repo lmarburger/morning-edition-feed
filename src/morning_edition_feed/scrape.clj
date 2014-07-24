@@ -4,9 +4,6 @@
   (:import (java.util Date Locale TimeZone)
            java.text.SimpleDateFormat))
 
-;;; TODO: Extract total time
-;;; TODO: Extract episode image
-
 (def ^:dynamic *base-url* "http://www.npr.org/programs/morning-edition/")
 
 (defn- ^SimpleDateFormat make-simple-format

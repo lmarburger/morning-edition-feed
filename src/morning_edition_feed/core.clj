@@ -7,9 +7,9 @@
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]))
 
-;;; TODO: Order episodes in broadcast order
-;;; TODO: Add date to episodes
 ;;; TODO: Add last-modified response header
+;;; TODO: Extract total time
+;;; TODO: Extract episode image
 
 (def routes
   (app
