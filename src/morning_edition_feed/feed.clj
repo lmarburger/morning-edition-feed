@@ -9,7 +9,7 @@
   []
   ;; SimpleDateFormat is not threadsafe, so return a new instance each time
   (doto (SimpleDateFormat. "EEE, dd MMM yyyy HH:mm:ss ZZZ" Locale/US)
-    (.setTimeZone (TimeZone/getTimeZone "UTC"))))
+    (.setTimeZone (TimeZone/getTimeZone "America/New_York"))))
 
 (defn podcast-date-format [date]
   (.format (make-http-format) date))

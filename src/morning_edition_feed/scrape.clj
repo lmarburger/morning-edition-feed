@@ -14,7 +14,7 @@
   []
   ;; SimpleDateFormat is not threadsafe, so return a new instance each time
   (doto (SimpleDateFormat. "yyyy-MM-dd" Locale/US)
-    (.setTimeZone (TimeZone/getTimeZone "UTC"))))
+    (.setTimeZone (TimeZone/getTimeZone "America/New_York"))))
 
 (defn parse-simple-date [str]
   (.parse (make-simple-format) str))
