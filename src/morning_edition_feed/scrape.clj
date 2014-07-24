@@ -19,6 +19,13 @@
 (defn parse-simple-date [str]
   (.parse (make-simple-format) str))
 
+(defn broadcast-time
+  "Morning Edition is broadcast at 5am ET."
+  [date]
+  (-> (.getTime date)
+      (+ (* 5 60 60 1000))
+      (Date.)))
+
 (defn- fetch-url [url]
   (html/html-resource (java.net.URL. url)))
 
@@ -54,7 +61,8 @@
         date (-> (html/select raw-body [[:meta (html/attr= :name "date")]])
                  first
                  (get-in [:attrs :content])
-                 parse-simple-date)
+                 parse-simple-date
+                 broadcast-time)
         stories (html/select raw-body
                              [[:.story (complement (html/attr? :id))]])]
     {:date date :stories (map (partial extract-story date) stories)}))
