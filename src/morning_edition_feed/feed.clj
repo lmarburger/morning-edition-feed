@@ -14,12 +14,7 @@
 (defn podcast-date-format [date]
   (.format (make-http-format) date))
 
-(def ^:dynamic *date-sel* [:rss :> :channel :> :pubDate])
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
-
-(html/defsnippet date-model "morning_edition_feed/feed.xml" *date-sel*
-  [date]
-  [:pubDate] (html/content (podcast-date-format date)))
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
   [{:keys [id story-date headline story-url audio-url]}]
@@ -31,7 +26,7 @@
 
 (html/deftemplate podcast "morning_edition_feed/feed.xml"
   [date stories]
-  [:pubDate] (html/substitute (date-model date))
+  [:pubDate] (html/content (podcast-date-format date))
   [:item]    (html/substitute (map story-model stories)))
 
 (defn podcast-feed []
