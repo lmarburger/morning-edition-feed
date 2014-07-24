@@ -7,6 +7,10 @@
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]))
 
+;;; TODO: Order episodes in broadcast order
+;;; TODO: Add date to episodes
+;;; TODO: Add last-modified response header
+
 (def routes
   (app
    [""] (fn [req] (render-to-response (podcast-feed)))))
@@ -28,6 +32,3 @@
 
 (defn -main [& args]
   (run-server routes))
-
-;;; TODO: Order episodes in broadcast order
-;;; TODO: Add date to episodes

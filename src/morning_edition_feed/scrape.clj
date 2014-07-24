@@ -8,22 +8,6 @@
 ;;; TODO: Extract episode image
 
 (def ^:dynamic *base-url* "http://www.npr.org/programs/morning-edition/")
-(def ^:dynamic *fake-stories*
-  [{:headline "Story 1"
-    :id "abc123"
-    :story-url "http://google.com"
-    :audio-url "http://nrp.org/story-1.mp3"
-    :segment-num "1"}
-   {:headline "Second Story"
-    :id "def456"
-    :story-url "http://bing.com"
-    :audio-url "http://nrp.org/story-2.mp3"
-    :segment-num "2"}
-   {:headline "Finale"
-    :id "ghi789"
-    :story-url "http://yahoo.com"
-    :audio-url "http://nrp.org/story-3.mp3"
-    :segment-num "3"}])
 
 (defn- ^SimpleDateFormat make-simple-format
   "Parse simple date strings."
@@ -31,13 +15,6 @@
   ;; SimpleDateFormat is not threadsafe, so return a new instance each time
   (doto (SimpleDateFormat. "yyyy-MM-dd" Locale/US)
     (.setTimeZone (TimeZone/getTimeZone "UTC"))))
-
-;; (defn- ^SimpleDateFormat make-http-format
-;;   "Formats or parses dates into HTTP date format (RFC 822/1123)."
-;;   []
-;;   ;; SimpleDateFormat is not threadsafe, so return a new instance each time
-;;   (doto (SimpleDateFormat. "EEE, dd MMM yyyy HH:mm:ss ZZZ" Locale/US)
-;;     (.setTimeZone (TimeZone/getTimeZone "UTC"))))
 
 (defn parse-simple-date [str]
   (.parse (make-simple-format) str))
@@ -72,16 +49,12 @@
      :segment-num segment-num
      :story-date story-date}))
 
-(defn fake-fetch-latest-stories []
-  {:date "July 22, 2014"
-   :stories *fake-stories*})
-
 (defn fetch-latest-stories []
   (let [raw-body (fetch-url *base-url*)
-        date (parse-simple-date
-              (get-in (first (html/select raw-body
-                                          [[:meta (html/attr= :name "date")]]))
-                      [:attrs :content]))
+        date (-> (html/select raw-body [[:meta (html/attr= :name "date")]])
+                 first
+                 (get-in [:attrs :content])
+                 parse-simple-date)
         stories (html/select raw-body
                              [[:.story (complement (html/attr? :id))]])]
     {:date date :stories (map (partial extract-story date) stories)}))
