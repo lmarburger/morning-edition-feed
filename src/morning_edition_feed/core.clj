@@ -36,7 +36,7 @@
 
 (html/deftemplate podcast "morning_edition_feed/feed.xml"
   [date stories]
-  [:pubDate] (html/content (podcast-date-format date))
+  [:pubDate] (html/content (podcast-date-format (or date (Date.))))
   [:item]    (html/substitute (map story-model stories)))
 
 (defn podcast-feed []
