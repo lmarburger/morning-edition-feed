@@ -58,17 +58,29 @@
   (when-not (first (html/select html [:.full-show :.unavailable]))
     html))
 
+(defn previous-stories-url [html]
+  (-> (html/select html [:.program-nav :.prev :a])
+      first
+      (get-in [:attrs :href])))
+
+(defn latest-complete-story
+  ([] (latest-complete-story *base-url*))
+  ([url]
+     (let [raw-body (fetch-url url)]
+       (if (complete? raw-body)
+         raw-body
+         (recur (previous-stories-url raw-body))))))
+
 (defn fetch-latest-stories []
-  (if-let [raw-body (complete? (fetch-url *base-url*))]
-    (let [date (-> (html/select raw-body [[:meta (html/attr= :name "date")]])
-                   first
-                   (get-in [:attrs :content])
-                   parse-simple-date
-                   broadcast-time)
-          stories (html/select raw-body
-                               [[:.story (complement (html/attr? :id))]])]
-      {:date date :stories (map (partial extract-story date) stories)})
-    {}))
+  (let [raw-body (latest-complete-story)
+        date (-> (html/select raw-body [[:meta (html/attr= :name "date")]])
+                 first
+                 (get-in [:attrs :content])
+                 parse-simple-date
+                 broadcast-time)
+        stories (html/select raw-body
+                             [[:.story (complement (html/attr? :id))]])]
+    {:date date :stories (map (partial extract-story date) stories)}))
 
 (defn print-story [date story]
   (println (str " - " date " - " (:headline story))))
