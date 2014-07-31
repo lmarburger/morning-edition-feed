@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/morning-edition-feed-standalone.jar clojure.main -m morning-edition-feed.core

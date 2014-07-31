@@ -16,5 +16,6 @@
   :hooks [environ.leiningen.hooks]
   :uberjar-name "morning-edition-feed-standalone.jar"
   :ring {:handler morning-edition-feed.core/routes}
-  :main ^:skip-aot morning-edition-feed.core
-  :profiles {:production {:env {:production true}}})
+  :profiles {:production {:env {:production true}}
+             :uberjar {:main morning-edition-feed.core
+                       :aot :all}})
