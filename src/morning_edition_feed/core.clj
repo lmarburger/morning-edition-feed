@@ -1,14 +1,14 @@
 (ns morning-edition-feed.core
-  (:require [net.cgrand.enlive-html :as html])
+  (:require [net.cgrand.enlive-html :as html]
+            [yeller-clojure-client.ring :as yeller])
   (:use [morning-edition-feed.utils :only [render-to-response]]
-        ;; [morning-edition-feed.scrape :only [fetch-latest-stories]]
         [morning-edition-feed.api :only [fetch-latest-program]]
         [net.cgrand.moustache :only [app]]
         [environ.core :refer [env]]
         [ring.adapter.jetty :only [run-jetty]]
-        [ring.middleware.reload :only [wrap-reload]]
-        [ring.middleware.stacktrace :only [wrap-stacktrace]]))
+        [ring.middleware.reload :only [wrap-reload]]))
 
+(def ^:dynamic *yeller-token* "DnHV_chmlQUuD0rdReK5M5j4LYNxLBmotdgqouwe4wI")
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
@@ -37,7 +37,7 @@
     (run-jetty
      (-> app
          (wrap-reload nses)
-         (wrap-stacktrace))
+         (yeller/wrap-ring {:token *yeller-token*}))
      {:port port :join? false})))
 
 (defmacro run-server [app]

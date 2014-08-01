@@ -9,7 +9,8 @@
                  [ring/ring-jetty-adapter "1.2.2"]
                  [enlive "1.1.5"]
                  [net.cgrand/moustache "1.1.0"]
-                 [environ "0.5.0"]]
+                 [environ "0.5.0"]
+                 [yeller-clojure-client "0.1.0-SNAPSHOT"]]
   :min-lein-version "2.0.0"
   :plugins [[lein-ring "0.8.11"]
             [environ/environ.lein "0.2.1"]]
