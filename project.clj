@@ -3,6 +3,7 @@
   :url "http://morning-edition-podcast.herokuapp.com"
   :license {:name "MIT"
             :url "http://opensource.org/licenses/MIT"}
+  :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/data.zip "0.1.1"]
                  [ring/ring-jetty-adapter "1.2.2"]
@@ -10,10 +11,7 @@
                  [compojure "1.1.8"]
                  [environ "0.5.0"]
                  [yeller-clojure-client "0.1.0-SNAPSHOT"]]
-  :min-lein-version "2.0.0"
-  :plugins [[lein-ring "0.8.11"]
-            [environ/environ.lein "0.2.1"]]
-  :hooks [environ.leiningen.hooks]
+  :plugins [[lein-ring "0.8.11"]]
   :uberjar-name "morning-edition-feed-standalone.jar"
   :ring {:handler morning-edition-feed.core/app}
   :main morning-edition-feed.core
