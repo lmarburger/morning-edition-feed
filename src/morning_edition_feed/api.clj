@@ -2,13 +2,11 @@
   (:require [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [clojure.data.zip.xml :as zip-xml]
-            [environ.core :refer [env]])
+            [clojure.data.zip.xml :as zip-xml])
   (:import (java.util Date Locale TimeZone)
            java.text.SimpleDateFormat))
 
-(def ^:dynamic *api-key* (env :npr-token))
-(def ^:dynamic *api-url* (str "http://api.npr.org/query?id=3&dateType=story&numResults=42&apiKey=" *api-key*))
+(def ^:dynamic *api-base-url* "http://api.npr.org/query?id=3&dateType=story&numResults=42&apiKey=")
 
 (defn test-api-root []
   (-> "out.xml"
@@ -90,7 +88,10 @@
   (.format (make-simple-format) date))
 
 (defn fetch-latest-program
-  ([] (fetch-latest-program (Date.)))
-  ([date]
-     (let [api-url (str *api-url* "&date=" (format-simple-date date))]
+  ([token] (fetch-latest-program token (Date.)))
+  ([token date]
+     (let [api-url (str *api-base-url*
+                        token
+                        "&date="
+                        (format-simple-date date))]
        (api->map date (fetch-url api-url)))))

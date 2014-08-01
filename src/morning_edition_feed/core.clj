@@ -4,12 +4,15 @@
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [ring.adapter.jetty :as jetty]
-            [environ.core :refer [env]])
-  (:use [morning-edition-feed.utils :only [render-to-response]]
-        [morning-edition-feed.api :only [fetch-latest-program]]))
+            [environ.core :refer [env]]
+            [morning-edition-feed.utils :refer [render-to-response]]
+            [morning-edition-feed.api :refer [fetch-latest-program]]))
 
-(def ^:dynamic *yeller-token* (or (env :yeller-token) "nope"))
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
+(def ^:dynamic *npr-token* (env :npr-token))
+(def ^:dynamic *yeller-options*
+  (when-let [token (env :yeller-token)]
+    {:token token}))
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
   [{:keys [id title description date story-url audio-url]}]
@@ -25,7 +28,7 @@
   [:item]    (html/substitute (map story-model stories)))
 
 (defn podcast-feed []
-  (let [{:keys [date stories]} (fetch-latest-program)]
+  (let [{:keys [date stories]} (fetch-latest-program *npr-token*)]
     (podcast date stories)))
 
 (defroutes app-routes
@@ -34,11 +37,15 @@
         :headers {"Content-Type" "text/xml; charset=utf-8"}
         :body (render-to-response (podcast-feed))}))
 
+(defn wrap-yeller [app]
+  (if-let [options *yeller-options*]
+    (yeller/wrap-ring app options)
+    app))
+
 (def app
   (let [environment (or (env :env) "development")]
     (-> app-routes
-        (yeller/wrap-ring {:token *yeller-token*
-                           :environment environment})
+        wrap-yeller
         handler/site)))
 
 (defn -main [& args]

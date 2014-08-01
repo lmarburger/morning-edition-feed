@@ -1,6 +1,5 @@
 (ns morning-edition-feed.utils
   (:require [net.cgrand.enlive-html :as html]
-            [clojure.java.io :as io]
             [clojure.string :as string]))
 
 (defn render [t]
