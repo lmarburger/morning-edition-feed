@@ -3,10 +3,11 @@
             [clojure.xml :as xml]
             [clojure.zip :as zip]
             [clojure.data.zip.xml :as zip-xml])
+  (:use [environ.core :refer [env]])
   (:import (java.util Date Locale TimeZone)
            java.text.SimpleDateFormat))
 
-(def ^:dynamic *api-key* "MDE1MjUxNTIyMDE0MDYzMDQyMzRhNmEyOQ001")
+(def ^:dynamic *api-key* (env :npr-token))
 (def ^:dynamic *api-url* (str "http://api.npr.org/query?id=3&dateType=story&numResults=42&apiKey=" *api-key*))
 
 (defn test-api-root []

@@ -8,7 +8,7 @@
         [morning-edition-feed.api :only [fetch-latest-program]]
         [environ.core :refer [env]]))
 
-(def ^:dynamic *yeller-token* "DnHV_chmlQUuD0rdReK5M5j4LYNxLBmotdgqouwe4wI")
+(def ^:dynamic *yeller-token* (or (env :yeller-token) "nope"))
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
