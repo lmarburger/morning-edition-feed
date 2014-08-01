@@ -2,8 +2,8 @@
   (:require [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [clojure.data.zip.xml :as zip-xml])
-  (:use [environ.core :refer [env]])
+            [clojure.data.zip.xml :as zip-xml]
+            [environ.core :refer [env]])
   (:import (java.util Date Locale TimeZone)
            java.text.SimpleDateFormat))
 

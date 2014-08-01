@@ -3,10 +3,10 @@
             [yeller-clojure-client.ring :as yeller]
             [compojure.core :refer :all]
             [compojure.handler :as handler]
-            [ring.adapter.jetty :as jetty])
+            [ring.adapter.jetty :as jetty]
+            [environ.core :refer [env]])
   (:use [morning-edition-feed.utils :only [render-to-response]]
-        [morning-edition-feed.api :only [fetch-latest-program]]
-        [environ.core :refer [env]]))
+        [morning-edition-feed.api :only [fetch-latest-program]]))
 
 (def ^:dynamic *yeller-token* (or (env :yeller-token) "nope"))
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
