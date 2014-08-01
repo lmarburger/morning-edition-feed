@@ -46,7 +46,10 @@
         :headers {"Content-Type" "text/xml; charset=utf-8"}
         :body (render-to-response (podcast-feed))}))
 
-(def app (handler/site app-routes))
+(def app
+  (-> app-routes
+      (yeller/wrap-ring {:token *yeller-token*})
+      handler/site))
 
 (defn -main [& args]
   (let [port (Integer. (or (env :port) 5000))]
