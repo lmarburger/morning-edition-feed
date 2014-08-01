@@ -1,8 +1,7 @@
 (ns morning-edition-feed.utils
   (:require [net.cgrand.enlive-html :as html]
             [clojure.java.io :as io]
-            [clojure.string :as string])
-  (:use [ring.util.response :only [response]]))
+            [clojure.string :as string]))
 
 (defn render [t]
   (apply str t))
@@ -26,8 +25,7 @@
                   "<rss xmlns:itunes=\"http://www.itunes.com/dtds/podcast-1.0.dtd\" version=\"2.0\">"))
 
 (def render-to-response
-  (comp response
-        add-xml-declaration
+  (comp add-xml-declaration
         add-xml-namespaces
         replace-hack-tags
         render))

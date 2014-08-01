@@ -2,12 +2,11 @@
   (:require [net.cgrand.enlive-html :as html]
             [yeller-clojure-client.ring :as yeller]
             [compojure.core :refer :all]
-            [compojure.handler :as handler])
+            [compojure.handler :as handler]
+            [ring.adapter.jetty :as jetty])
   (:use [morning-edition-feed.utils :only [render-to-response]]
         [morning-edition-feed.api :only [fetch-latest-program]]
-        [environ.core :refer [env]]
-        [ring.adapter.jetty :only [run-jetty]]
-        [ring.middleware.reload :only [wrap-reload]]))
+        [environ.core :refer [env]]))
 
 (def ^:dynamic *yeller-token* "DnHV_chmlQUuD0rdReK5M5j4LYNxLBmotdgqouwe4wI")
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
@@ -29,24 +28,26 @@
   (let [{:keys [date stories]} (fetch-latest-program)]
     (podcast date stories)))
 
-(defn run-server* [app & {:keys [port] :or {port (Integer. (or (env :port)
-                                                               5000))}}]
-  (let [nses (if-let [m (meta app)]
-               [(-> (:ns (meta app)) str symbol)]
-               [])]
-    (println "run-server*" nses)
-    (run-jetty
-     (-> app
-         (wrap-reload nses)
-         (yeller/wrap-ring {:token *yeller-token*}))
-     {:port port :join? false})))
+;; (defn run-server* [app & {:keys [port] :or {port (Integer. (or (env :port)
+;;                                                                5000))}}]
+;;   (run-jetty
+;;    (-> app
+;;        (yeller/wrap-ring {:token *yeller-token*}))
+;;    {:port port :join? false}))
 
-(defmacro run-server [app]
-  `(run-server* (var ~app)))
+;; (defmacro run-server [app]
+;;   `(run-server* (var ~app)))
+
+;;; (defn -main [& args] (run-server* app))
 
 (defroutes app-routes
   (GET "/" []
-       (render-to-response (podcast-feed))))
+       {:status 200
+        :headers {"Content-Type" "text/xml; charset=utf-8"}
+        :body (render-to-response (podcast-feed))}))
 
 (def app (handler/site app-routes))
-(defn -main [& args] (run-server app))
+
+(defn -main [& args]
+  (let [port (Integer. (or (env :port) 5000))]
+    (jetty/run-jetty app {:port port :join? false})))
