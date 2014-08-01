@@ -28,18 +28,6 @@
   (let [{:keys [date stories]} (fetch-latest-program)]
     (podcast date stories)))
 
-;; (defn run-server* [app & {:keys [port] :or {port (Integer. (or (env :port)
-;;                                                                5000))}}]
-;;   (run-jetty
-;;    (-> app
-;;        (yeller/wrap-ring {:token *yeller-token*}))
-;;    {:port port :join? false}))
-
-;; (defmacro run-server [app]
-;;   `(run-server* (var ~app)))
-
-;;; (defn -main [& args] (run-server* app))
-
 (defroutes app-routes
   (GET "/" []
        {:status 200
