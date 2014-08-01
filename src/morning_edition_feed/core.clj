@@ -1,9 +1,10 @@
 (ns morning-edition-feed.core
   (:require [net.cgrand.enlive-html :as html]
-            [yeller-clojure-client.ring :as yeller])
+            [yeller-clojure-client.ring :as yeller]
+            [compojure.core :refer :all]
+            [compojure.handler :as handler])
   (:use [morning-edition-feed.utils :only [render-to-response]]
         [morning-edition-feed.api :only [fetch-latest-program]]
-        [net.cgrand.moustache :only [app]]
         [environ.core :refer [env]]
         [ring.adapter.jetty :only [run-jetty]]
         [ring.middleware.reload :only [wrap-reload]]))
@@ -43,9 +44,9 @@
 (defmacro run-server [app]
   `(run-server* (var ~app)))
 
-(def routes
-  (app
-   [""] (fn [req] (render-to-response (podcast-feed)))))
+(defroutes app-routes
+  (GET "/" []
+       (render-to-response (podcast-feed))))
 
-(defn -main [& args]
-  (run-server routes))
+(def app (handler/site app-routes))
+(defn -main [& args] (run-server app))
