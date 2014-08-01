@@ -1,0 +1,4 @@
+ - Set feed pubDate to last story pubDate
+ - Add last-modified response header
+ - Extract total time
+ - Extract episode image

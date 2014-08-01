@@ -9,10 +9,6 @@
         [ring.middleware.reload :only [wrap-reload]]
         [ring.middleware.stacktrace :only [wrap-stacktrace]]))
 
-;;; TODO: Add last-modified response header
-;;; TODO: Extract total time
-;;; TODO: Extract episode image
-
 (def ^:dynamic *story-sel* [:rss :> :channel :> :item])
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
