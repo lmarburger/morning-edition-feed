@@ -62,11 +62,17 @@
      :audio-url audio-url
      :segment-num segment-num}))
 
+(defn published-stories [root]
+  (filter :audio-url
+          (mapv story->map (zip-xml/xml-> root
+                                          :list
+                                          :story))))
+
 (defn api->map
   [date root]
   (let [title       (zip-xml/xml1-> root :list :title zip-xml/text)
         description (zip-xml/xml1-> root :list :miniTeaser zip-xml/text)
-        stories     (mapv story->map (zip-xml/xml-> root :list :story))]
+        stories     (published-stories root)]
     {:title title
      :description description
      :date (format-story-date date)
