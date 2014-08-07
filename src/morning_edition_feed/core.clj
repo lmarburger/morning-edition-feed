@@ -15,14 +15,11 @@
     {:token token}))
 
 (html/defsnippet story-model "morning_edition_feed/feed.xml" *story-sel*
-  [{:keys [id title description date duration story-url audio-url image-url]}]
+  [{:keys [id title description date duration story-url audio-url]}]
   [:guid] (html/content id)
   [:pubDate] (html/content date)
   [:title] (html/content title)
   [:itunes:summary] (html/content description)
-  [:itunes:image] (if image-url
-                    (html/set-attr :href image-url)
-                    (html/substitute nil))
   [:itunes:duration] (html/content duration)
   [:linkx] (html/content story-url)
   [:enclosure] (html/set-attr :url audio-url))

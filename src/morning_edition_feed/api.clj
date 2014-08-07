@@ -66,12 +66,7 @@
                                     :audio
                                     :format
                                     :mediastream
-                                    zip-xml/text)
-        image-url   (zip-xml/xml1-> story
-                                    :image
-                                    :crop
-                                    (zip-xml/attr= :type "standard")
-                                    (zip-xml/attr :src))]
+                                    zip-xml/text)]
     {:id id
      :title title
      :description description
@@ -79,8 +74,7 @@
      :duration duration
      :story-url story-url
      :audio-url (stream-url->mp3-url stream-url)
-     :segment-num segment-num
-     :image-url image-url}))
+     :segment-num segment-num}))
 
 (defn published-stories [root]
   (filter :audio-url
