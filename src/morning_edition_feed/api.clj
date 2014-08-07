@@ -2,11 +2,13 @@
   (:require [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [clojure.data.zip.xml :as zip-xml])
+            [clojure.data.zip.xml :as zip-xml]
+            [clojure.string :as string])
   (:import (java.util Date Locale TimeZone)
            java.text.SimpleDateFormat))
 
 (def ^:dynamic *api-base-url* "http://api.npr.org/query?id=3&dateType=story&numResults=42&apiKey=")
+(def ^:dynamic *mp3-base-url* "http://pd.npr.org/")
 
 (defn test-api-root []
   (-> "out.xml"
@@ -31,36 +33,54 @@
       (+ (* segment-num 1000))
       (Date.)))
 
+(defn stream-url->mp3-url
+  "NPR doesn't offer up raw mp3 files only m4u files. Turns out the link to
+   the mp3 is included in the streaming url."
+  [stream-url]
+  (str *mp3-base-url*
+       (string/replace stream-url #"rtmp://.*:(.*)" "$1")))
+
 (defn story->map
   [story]
   (let [id          (zip-xml/attr   story :id)
-        title       (zip-xml/xml1-> story :title   zip-xml/text)
-        description (zip-xml/xml1-> story :teasure zip-xml/text)
+        title       (zip-xml/xml1-> story :title  zip-xml/text)
+        description (zip-xml/xml1-> story :teaser zip-xml/text)
         date        (parse-story-date
                      (zip-xml/xml1-> story
                                      :show
                                      :showDate
                                      zip-xml/text))
-        story-url   (zip-xml/xml1-> story
-                                    :link
-                                    (zip-xml/attr= :type "html")
-                                    zip-xml/text)
-        audio-url   (zip-xml/xml1-> story
+        duration    (zip-xml/xml1-> story
                                     :audio
-                                    :format
-                                    :mp4
+                                    :duration
                                     zip-xml/text)
         segment-num (Integer/valueOf (zip-xml/xml1-> story
                                                      :show
                                                      :segNum
-                                                     zip-xml/text))]
+                                                     zip-xml/text))
+        story-url   (zip-xml/xml1-> story
+                                    :link
+                                    (zip-xml/attr= :type "html")
+                                    zip-xml/text)
+        stream-url  (zip-xml/xml1-> story
+                                    :audio
+                                    :format
+                                    :mediastream
+                                    zip-xml/text)
+        image-url   (zip-xml/xml1-> story
+                                    :image
+                                    :crop
+                                    (zip-xml/attr= :type "standard")
+                                    (zip-xml/attr :src))]
     {:id id
      :title title
      :description description
      :date (format-story-date (hack-story-date date segment-num))
+     :duration duration
      :story-url story-url
-     :audio-url audio-url
-     :segment-num segment-num}))
+     :audio-url (stream-url->mp3-url stream-url)
+     :segment-num segment-num
+     :image-url image-url}))
 
 (defn published-stories [root]
   (filter :audio-url

@@ -14,12 +14,14 @@
       <height>306</height>
     </image>
     <item>
-      <itunes:image href="http://f.cl.ly/items/0P06051v082S432Z3z1u/Morning%20Edition.jpg"/>
       <title>In Crowded Gaza, Civilians Have Few Places To Flee</title>
+      <itunes:summary>In Crowded Gaza, Civilians Have Few Places To Flee</itunes:summary>
+      <itunes:image href="http://f.cl.ly/items/0P06051v082S432Z3z1u/Morning%20Edition.jpg"/>
+      <itunes:duration>42</itunes:duration>
       <linkx>http://www.npr.org/blogs/parallels/2014/07/21/333537714/in-crowded-gaza-civilians-have-few-places-to-flee</linkx>
       <guid isPermaLink="false">res333537842</guid>
       <pubDate>Mon, 21 Jul 2014</pubDate>
-      <enclosure url="http://pd.npr.org/anon.npr-mp3/npr/me/2014/07/20140721_me_in_gaza_ambulances_race_to_recover_dead_and_wounded.mp3" type="audio/mp3"/>
+      <enclosure url="http://pd.npr.org/anon.npr-mp3/npr/me/2014/07/20140721_me_in_gaza_ambulances_race_to_recover_dead_and_wounded.mp3" type="audio/mpeg"/>
     </item>
   </channel>
 </rss>
