@@ -37,8 +37,9 @@
   "NPR doesn't offer up raw mp3 files only m4u files. Turns out the link to
    the mp3 is included in the streaming url."
   [stream-url]
-  (str *mp3-base-url*
-       (string/replace stream-url #"rtmp://.*:(.*)" "$1")))
+  (when stream-url
+    (str *mp3-base-url*
+         (string/replace stream-url #"rtmp://.*:(.*)" "$1"))))
 
 (defn story->map
   [story]
