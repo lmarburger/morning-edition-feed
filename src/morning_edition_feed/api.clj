@@ -8,7 +8,7 @@
            java.text.SimpleDateFormat))
 
 (def ^:dynamic *api-base-url* "http://api.npr.org/query?id=3&dateType=story&numResults=42&apiKey=")
-(def ^:dynamic *mp3-base-url* "http://pd.npr.org/")
+(def ^:dynamic *mp3-base-url* "http://public.npr.org/")
 
 (defn test-api-root []
   (-> "out.xml"
